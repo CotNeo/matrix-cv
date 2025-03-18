@@ -1,36 +1,165 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Portfolio Projesi - Dokümantasyon
 
-## Getting Started
+## 📌 Proje Açıklaması
+Bu proje, **Next.js, TypeScript, Three.js, Tailwind CSS ve UI Animations** kullanarak bir **kişisel portföy web uygulaması** geliştirmek amacıyla oluşturulmuştur. Modüler, ölçeklenebilir ve yönetilebilir bir yapı hedeflenmiştir. 
 
-First, run the development server:
+## 🏗 Proje Yapısı
+Proje, bileşen bazlı bir mimariye sahip olup, **Next.js** ile SSR ve statik sayfa oluşturma desteklenmektedir. **TypeScript** kullanılarak kod kalitesi artırılmış, **Tailwind CSS** ile stil yönetimi kolaylaştırılmış ve **Three.js** ile 3D görselleştirme desteği sağlanmıştır.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 🔹 **Ana Bileşenler ve Sayfalar**
+1. **Header**: Navigasyon çubuğu, logo, tema değiştirme ve dil değiştirme desteği.
+2. **Hero Section**: Kullanıcıyı karşılayan etkileyici bir giriş bölümü.
+3. **About**: Kendini tanıtan metin ve görsel içerikler.
+4. **Tech Stack**: Kullandığın teknolojileri sergileyen alan.
+5. **Projects**: Tamamlanan veya üzerinde çalışılan projelerin gösterildiği alan.
+6. **GitHub Status**: GitHub istatistiklerini gösteren bileşen.
+7. **Certificates**: Aldığın sertifikaları içeren alan.
+8. **Chatbot**: Kullanıcıların senin hakkında bilgi alabileceği özel bir sohbet botu.
+9. **Footer**: İletişim ve sosyal medya bağlantılarının bulunduğu alt kısım.
+
+## 📂 **Dosya Yapısı**
+Proje dosya yapısı aşağıdaki gibi organize edilmiştir:
+
+```
+root/
+├── components/
+│   ├── Header.tsx
+│   ├── Hero.tsx
+│   ├── About.tsx
+│   ├── TechStack.tsx
+│   ├── Projects.tsx
+│   ├── GitHubStatus.tsx
+│   ├── Certificates.tsx
+│   ├── Chatbot.tsx
+│   ├── Footer.tsx
+│   ├── LanguageSwitcher.tsx
+│   ├── animations/
+│   ├── ui/
+│   ├── three/
+│
+├── pages/
+│   ├── index.tsx
+│   ├── _app.tsx
+│   ├── _document.tsx
+│   ├── chatbot.tsx
+│
+├── styles/
+│   ├── globals.css
+│   ├── tailwind.config.js
+│
+├── public/
+│   ├── assets/
+│
+├── utils/
+│   ├── helpers.ts
+│   ├── constants.ts
+│   ├── i18n.ts
+│
+├── tsconfig.json
+├── next.config.js
+├── package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌍 **Çok Dilli Destek (Türkçe & İngilizce)**
+Web sitesi artık **Türkçe ve İngilizce** dillerinde kullanılabilir. Kullanıcılar **header bölümündeki dil değiştirici** ile diller arasında kolayca geçiş yapabilir.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **Dil Desteği için Kullanılan Teknolojiler:**
+- **Next.js i18n Routing** (Yerleşik dil desteği)
+- **react-i18next** veya **next-translate** kütüphanesi
+- **Dil anahtarları**: `locales/` klasöründe **tr.json** ve **en.json** dosyaları
+- **Tüm metinler dinamik olarak çevrilebilir**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### **Örnek Kullanım** _(i18n.ts)_:
+```typescript
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 
-## Learn More
+const resources = {
+  en: {
+    translation: {
+      "welcome": "Welcome to my portfolio",
+      "about": "About Me"
+    }
+  },
+  tr: {
+    translation: {
+      "welcome": "Portföyüme hoş geldiniz",
+      "about": "Hakkımda"
+    }
+  }
+};
 
-To learn more about Next.js, take a look at the following resources:
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "en",
+  fallbackLng: "en",
+  interpolation: { escapeValue: false }
+});
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+export default i18n;
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### **Dil Değiştirici Bileşeni** _(LanguageSwitcher.tsx)_:
+```tsx
+import { useTranslation } from 'react-i18next';
 
-## Deploy on Vercel
+const LanguageSwitcher = () => {
+  const { i18n } = useTranslation();
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  return (
+    <div>
+      <button onClick={() => changeLanguage('en')}>🇬🇧 English</button>
+      <button onClick={() => changeLanguage('tr')}>🇹🇷 Türkçe</button>
+    </div>
+  );
+};
+
+export default LanguageSwitcher;
+```
+
+## 🔧 **Kullanılan Teknolojiler**
+| Teknoloji | Açıklama |
+|-----------|-------------|
+| **Next.js** | React tabanlı framework |
+| **TypeScript** | Tip güvenliği ve ölçeklenebilirlik |
+| **Three.js** | 3D modelleme ve animasyon |
+| **Tailwind CSS** | CSS framework |
+| **Framer Motion** | UI animasyonları |
+| **GitHub API** | GitHub istatistiklerini çekmek için |
+| **Vercel** | Deployment ve hosting |
+| **react-i18next** | Çoklu dil desteği |
+| **Hugging Face / NLP.js / Rasa** | Ücretsiz AI chatbot modelleri |
+
+## 🚀 **Kurulum ve Çalıştırma**
+
+### 1️⃣ **Projeyi Klonla**
+```bash
+git clone https://github.com/kullaniciadi/next-portfolio.git
+cd next-portfolio
+```
+
+### 2️⃣ **Bağımlılıkları Yükle**
+```bash
+yarn install  # veya npm install
+```
+
+### 3️⃣ **Geliştirme Ortamında Çalıştır**
+```bash
+yarn dev  # veya npm run dev
+```
+
+### 4️⃣ **Build ve Deploy**
+```bash
+yarn build && yarn start  # veya npm run build && npm start
+```
+
+## 📜 **Lisans**
+Bu proje MIT Lisansı altında sunulmaktadır.
+
+---
+🎯 **Hedefin:** Profesyonel bir portföy sitesi ile yeteneklerini ve projelerini sergilemek! 🚀
+
